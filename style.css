@@ -1,0 +1,36 @@
+/*** Universal Styles ***/
+
+html, * {
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+}
+
+body, main, footer {
+    margin: 0;
+}
+
+img {
+    width: 100%;
+    max-width: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+/*========================= MAIN =========================*/
+
+.wrapper {
+    width: min(100%, 350px);
+    aspect-ratio: 1 / 1.75;
+    margin: 0 auto;
+}
+
+.calculator {
+    width: 95%;
+    height: 100%;
+    margin: auto;
+    border: 6px solid black;
+    border-radius: 20px;
+    background-color: rgb(128, 128, 128);
+}
