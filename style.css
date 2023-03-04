@@ -5,6 +5,10 @@ html, * {
     box-sizing: border-box;
 }
 
+html {
+    background: linear-gradient(to right, #ADA996, #F2F2F2, #DBDBDB, #EAEAEA);
+}
+
 body, main, footer {
     margin: 0;
 }
@@ -33,4 +37,12 @@ a {
     border: 6px solid black;
     border-radius: 20px;
     background-color: rgb(128, 128, 128);
+}
+
+/*========================= Footer =========================*/
+
+footer {
+    height: 25px;
+    padding-right: 20px;
+    text-align: right;
 }
