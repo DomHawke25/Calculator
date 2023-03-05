@@ -31,12 +31,48 @@ a {
 }
 
 .calculator {
+    display: flex;
+    flex-direction: column;
     width: 95%;
     height: 100%;
     margin: auto;
     border: 6px solid black;
     border-radius: 20px;
-    background-color: rgb(128, 128, 128);
+    background-color: #89CFF0;
+}
+
+.display {
+    height: 25%;
+}
+
+.memory {
+    height: 8%;
+}
+
+.keypad {
+    height: 67%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+}
+
+.keypad-button {
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-weight: 600;
+    background-color: #9DD9F3;
+}
+
+.keypad-button:nth-child(n+9):nth-child(-n+11),
+.keypad-button:nth-child(n+13):nth-child(-n+15),
+.keypad-button:nth-child(n+17):nth-child(-n+19),
+.keypad-button:nth-child(n+21):nth-child(-n+23) {
+    background-color: #B8E2F2;
+}
+
+.keypad-button:nth-last-child(1) {
+    background-color: #94C58C;
 }
 
 /*========================= Footer =========================*/
