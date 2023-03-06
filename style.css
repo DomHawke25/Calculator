@@ -24,12 +24,14 @@ a {
 
 /*========================= MAIN =========================*/
 
+/*** Wrapper that sizes the calculator according to screen size ***/
 .wrapper {
     width: min(100%, 350px);
     aspect-ratio: 1 / 1.75;
     margin: 0 auto;
 }
 
+/*** Styles for outline and layout of contents of the Calculator ***/
 .calculator {
     display: flex;
     flex-direction: column;
@@ -41,14 +43,61 @@ a {
     background-color: #89CFF0;
 }
 
+/*** Styles for the output display ***/
 .display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 25%;
 }
 
+.display-both {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 97%;
+}
+
+.display-both p {
+    margin: 5px;
+}
+
+.display-upper {
+    height: 33%;
+    align-items: flex-end;
+}
+
+.display-main {
+    height: 66%;
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+.display-main {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+/*** Styles for the memory buttons ***/
 .memory {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     height: 8%;
 }
 
+.memory-button {
+    margin: 2px;
+    border: none;
+    background-color: inherit;
+}
+
+@media screen and (min-width: 801px) {
+    .memory-button:hover {
+        font-weight: 600;
+    }
+}
+
+/*** Styles for the keypad ***/
 .keypad {
     height: 67%;
     display: grid;
@@ -61,6 +110,7 @@ a {
     border: 1px solid black;
     border-radius: 5px;
     font-weight: 600;
+    font-size: 1.2rem;
     background-color: #9DD9F3;
 }
 
@@ -73,6 +123,12 @@ a {
 
 .keypad-button:nth-last-child(1) {
     background-color: #94C58C;
+}
+
+@media screen and (min-width: 801px) {
+    .keypad-button:hover {
+        border: 3px solid black;
+    }
 }
 
 /*========================= Footer =========================*/

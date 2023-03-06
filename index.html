@@ -16,47 +16,50 @@
     <main>
         <section class="wrapper">
             <section class="calculator">
-                <section class="display"></section>
+                <section class="display">
+                    <div class="display-both display-upper"><p id="display-upper"></p></div>
+                    <div class="display-both display-main"><p id="display-main"></p></div>
+                </section>
                 <section class="memory">
-                    <div id="memory-MC"></div>
-                    <div id="memory-MR"></div>
-                    <div id="memory-M+"></div>
-                    <div id="memory-M-"></div>
-                    <div id="memory-MS"></div>
-                    <div id="memory-Mu"></div>
+                    <button id="memory-MC" type="button" class="memory-button">MC</button>
+                    <button id="memory-MR" type="button" class="memory-button">MR</button>
+                    <button id="memory-M+" type="button" class="memory-button">M+</button>
+                    <button id="memory-M-" type="button" class="memory-button">M-</button>
+                    <button id="memory-MS" type="button" class="memory-button">MS</button>
+                    <button id="memory-M-Down" type="button" class="memory-button">M</button>
                 </section>
                 <section class="keypad">
-                    <button id="keypad-%" class="keypad-button">%</button>
-                    <button id="keypad-CE" class="keypad-button">CE</button>
-                    <button id="keypad-C" class="keypad-button">C</button>
-                    <button id="keypad-delete" class="keypad-button">DEL</button>
-                    <button id="keypad-fraction" class="keypad-button">1/x</button>
-                    <button id="keypad-power" class="keypad-button">x2</button>
-                    <button id="keypad-root" class="keypad-button">root</button>
-                    <button id="keypad-divide" class="keypad-button">/</button>
-                    <button id="keypad-7" class="keypad-button">7</button>
-                    <button id="keypad-8" class="keypad-button">8</button>
-                    <button id="keypad-9" class="keypad-button">9</button>
-                    <button id="keypad-x" class="keypad-button">X</button>
-                    <button id="keypad-4" class="keypad-button">4</button>
-                    <button id="keypad-5" class="keypad-button">5</button>
-                    <button id="keypad-6" class="keypad-button">6</button>
-                    <button id="keypad--" class="keypad-button">-</button>
-                    <button id="keypad-1" class="keypad-button">1</button>
-                    <button id="keypad-2" class="keypad-button">2</button>
-                    <button id="keypad-3" class="keypad-button">3</button>
-                    <button id="keypad-+" class="keypad-button">+</button>
-                    <button id="keypad-+-" class="keypad-button">+/-</button>
-                    <button id="keypad-0" class="keypad-button">0</button>
-                    <button id="keypad-." class="keypad-button">.</button>
-                    <button id="keypad-=" class="keypad-button">=</button>
+                    <button id="keypad-%" type="button" class="keypad-button">%</button>
+                    <button id="keypad-CE" type="button" class="keypad-button">CE</button>
+                    <button id="keypad-C" type="button" class="keypad-button">C</button>
+                    <button id="keypad-delete" type="button" class="keypad-button">DEL</button>
+                    <button id="keypad-fraction" type="button" class="keypad-button"><sup>1</sup>/<sub>x</sub></button>
+                    <button id="keypad-power" type="button" class="keypad-button">x<sup>2</sup></button>
+                    <button id="keypad-root" type="button" class="keypad-button">root</button>
+                    <button id="keypad-divide" type="button" class="keypad-button">&#247</button>
+                    <button id="keypad-7" type="button" class="keypad-button">7</button>
+                    <button id="keypad-8" type="button" class="keypad-button">8</button>
+                    <button id="keypad-9" type="button" class="keypad-button">9</button>
+                    <button id="keypad-x" type="button" class="keypad-button">x</button>
+                    <button id="keypad-4" type="button" class="keypad-button">4</button>
+                    <button id="keypad-5" type="button" class="keypad-button">5</button>
+                    <button id="keypad-6" type="button" class="keypad-button">6</button>
+                    <button id="keypad--" type="button" class="keypad-button">-</button>
+                    <button id="keypad-1" type="button" class="keypad-button">1</button>
+                    <button id="keypad-2" type="button" class="keypad-button">2</button>
+                    <button id="keypad-3" type="button" class="keypad-button">3</button>
+                    <button id="keypad-+" type="button" class="keypad-button">+</button>
+                    <button id="keypad-+-" type="button" class="keypad-button">+/-</button>
+                    <button id="keypad-0" type="button" class="keypad-button">0</button>
+                    <button id="keypad-." type="button" class="keypad-button">.</button>
+                    <button id="keypad-=" type="button" class="keypad-button">=</button>
                 </section>
             </section>
         </section>
     </main>
 
     <footer>
-        <p>Icons included by <a href="https://icons8.com/" target="_blank">icons8</a></p>
+        <p>Icons included from <a href="https://icons8.com/" target="_blank">icons8</a></p>
     </footer>
 </body>
 </html>
