@@ -32,6 +32,9 @@ const selectFunction = id => {
             clearCalc();
             break;
         // Clear entry
+        case "Delete":
+            clearDisplay();
+            break;
         case "keypad-CE":
             clearDisplay();
             break;
@@ -113,10 +116,40 @@ const selectFunction = id => {
             addToNumber(".");
             break;
         // + Operand
+        case "+":
+            useOperator("+");
+            break;
+        case "keypad-+":
+            useOperator("+");
+            break;
         // - Operand
+        case "-":
+            useOperator("-");
+            break;
+        case "keypad--":
+            useOperator("-");
+            break;
         // / Operand
+        case "/":
+            useOperator("&#247");
+            break;
+        case "keypad-divide":
+            useOperator("&#247");
+            break;
         // * Operand
+        case "*":
+            useOperator("x");
+            break;
+        case "keypad-x":
+            useOperator("x");
+            break;
         // = Operand
+        case "=":
+            equals();
+            break;
+        case "keypad-=":
+            equals();
+            break;
         // Percentage
         // Fraction
         // Squared
@@ -136,17 +169,23 @@ const selectFunction = id => {
     }
 }
 
+// formats text to be printed to the display
+const printToDisplay = (num) => {
+    return num;
+}
+
 // Clears current calculation (C)
 const clearCalc = () => {
     clearDisplay();
     total = 0;
+    operator = undefined;
     upperDisplay.innerHTML = "";
 }
 
 // Clears current number entered (CE)
 const clearDisplay = () => {
     currentNum = "0";
-    mainDisplay.innerHTML = currentNum;
+    mainDisplay.innerHTML = printToDisplay(currentNum);
 }
 
 // Add entered number to current number
@@ -160,32 +199,72 @@ const addToNumber = num => {
     } else {
         currentNum = `${currentNum}${num}`;
     }
-
-    mainDisplay.innerHTML = currentNum;
+    mainDisplay.innerHTML = printToDisplay(currentNum);
 }
 
 // deletes last number from string
 const deleteNumber = () => {
-    if (currentNum.length > 1) {
-        currentNum = currentNum.slice(0, -1);
-        mainDisplay.innerHTML = currentNum;
-    } else {
-        currentNum = "0";
-        mainDisplay.innerHTML = currentNum;
-    }
+    currentNum = currentNum.length > 1 ? currentNum.slice(0, -1) : "0";
+    mainDisplay.innerHTML = printToDisplay(currentNum);
 }
 
-const useOperator = () => {
+const useOperator = (newOperator) => {
     switch (operator) {
+        case undefined:
+            total = parseFloat(currentNum);
+            updateOperator(newOperator);
+            break;
         case "+":
+            total += parseFloat(currentNum);
+            updateOperator(newOperator);
             break;
         case "-":
+            total -= parseFloat(currentNum);
+            updateOperator(newOperator);
             break;
         case "x":
+            total *= parseFloat(currentNum);
+            updateOperator(newOperator);
             break;
-        case "/":
+        case "&#247":
+            total /= parseFloat(currentNum);
+            updateOperator(newOperator);
             break;
         default:
             break;
+    }
+}
+
+const updateOperator = (newOperator) => {
+        upperDisplay.innerHTML = `${printToDisplay(total.toString())} ${newOperator}`;
+        operator = newOperator;
+        clearDisplay();
+}
+
+const equals = () => {
+    if (operator !== undefined) {
+        upperDisplay.innerHTML = `${printToDisplay(total.toString())} ${operator} ${printToDisplay(currentNum)} =`;
+        switch (operator) {
+            case "+":
+                total += parseFloat(currentNum);
+                mainDisplay.innerHTML = `${printToDisplay(total.toString())}`;
+                break;
+            case "-":
+                total -= parseFloat(currentNum);
+                mainDisplay.innerHTML = `${printToDisplay(total.toString())}`;
+                break;
+            case "x":
+                total *= parseFloat(currentNum);
+                mainDisplay.innerHTML = `${printToDisplay(total.toString())}`;
+                break;
+            case "&#247":
+                total /= parseFloat(currentNum);
+                mainDisplay.innerHTML = `${printToDisplay(total.toString())}`;
+                break;
+            default:
+                break;
+        }
+        operator = undefined;
+        currentNum = 0;
     }
 }
