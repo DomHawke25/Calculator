@@ -23,155 +23,78 @@ buttons.forEach(button => {
     }
 });
 
-
 // selects relevant function based on input
 const selectFunction = id => {
-    switch (id) {
+    if (id === "Escape" || id === "keypad-C") {
         // Clear calc
-        case "keypad-C":
-            clearCalc();
-            break;
+        clearCalc();
+    } else if (id === "Delete" || id === "keypad-CE") {
         // Clear entry
-        case "Delete":
-            clearDisplay();
-            break;
-        case "keypad-CE":
-            clearDisplay();
-            break;
+        clearDisplay();
+    } else if (id === "0" || id === "keypad-0") {
         // Number 0
-        case "0":
-            addToNumber("0");
-            break;
-        case "keypad-0":
-            addToNumber("0");
-            break;
+        addToNumber("0");
+    } else if (id === "1" || id === "keypad-1") {
         // Number 1
-        case "1":
-            addToNumber("1");
-            break;
-        case "keypad-1":
-            addToNumber("1");
-            break;
+        addToNumber("1");
+    } else if (id === "2" || id === "keypad-2") {
         // Number 2
-        case "2":
-            addToNumber("2");
-            break;
-        case "keypad-2":
-            addToNumber("2");
-            break;
+        addToNumber("2");
+    } else if (id === "3" || id === "keypad-3") {
         // Number 3
-        case "3":
-            addToNumber("3");
-            break;
-        case "keypad-3":
-            addToNumber("3");
-            break;
+        addToNumber("3");
+    } else if (id === "4" || id === "keypad-4") {
         // Number 4
-        case "4":
-            addToNumber("4");
-            break;
-        case "keypad-4":
-            addToNumber("4");
-            break;
+        addToNumber("4");
+    } else if (id === "5" || id === "keypad-5") {
         // Number 5
-        case "5":
-            addToNumber("5");
-            break;
-        case "keypad-5":
-            addToNumber("5");
-            break;
+        addToNumber("5");
+    } else if (id === "6" || id === "keypad-6") {
         // Number 6
-        case "6":
-            addToNumber("6");
-            break;
-        case "keypad-6":
-            addToNumber("6");
-            break;
+        addToNumber("6");
+    } else if (id === "7" || id === "keypad-7") {
         // Number 7
-        case "7":
-            addToNumber("7");
-            break;
-        case "keypad-7":
-            addToNumber("7");
-            break;
+        addToNumber("7");
+    } else if (id === "8" || id === "keypad-8") {
         // Number 8
-        case "8":
-            addToNumber("8");
-            break;
-        case "keypad-8":
-            addToNumber("8");
-            break;
+        addToNumber("8");
+    } else if (id === "9" || id === "keypad-9") {
         // Number 9
-        case "9":
-            addToNumber("9");
-            break;
-        case "keypad-9":
-            addToNumber("9");
-            break;
+        addToNumber("9");
+    } else if (id === "." || id === "keypad-.") {
         // Decimal Point
-        case ".":
-            addToNumber(".")
-            break;
-        case "keypad-.":
-            addToNumber(".");
-            break;
-        // + Operand
-        case "+":
-            useOperator("+");
-            break;
-        case "keypad-+":
-            useOperator("+");
-            break;
-        // - Operand
-        case "-":
-            useOperator("-");
-            break;
-        case "keypad--":
-            useOperator("-");
-            break;
-        // / Operand
-        case "/":
-            useOperator("&#247");
-            break;
-        case "keypad-divide":
-            useOperator("&#247");
-            break;
-        // * Operand
-        case "*":
-            useOperator("x");
-            break;
-        case "keypad-x":
-            useOperator("x");
-            break;
-        // = Operand
-        case "=":
-            equals();
-            break;
-        case "keypad-=":
-            equals();
-            break;
+        addToNumber(".")
+    } else if (id === "+" || id === "keypad-+") {
+        // Addition Operand
+        useOperator("+");
+    } else if (id === "-" || id === "keypad--") {
+        // Minus Operand
+        useOperator("-");
+    } else if (id === "/" || id === "keypad-divide") {
+        // Divide Operand
+        useOperator("&#247");
+    } else if (id === "*" || id === "keypad-x") {
+        // Multiply Operand
+        useOperator("x");
+    } else if (id === "Enter" || id === "=" || id === "keypad-=") {
+        // Equals Operand
+        equals();
+    } else if (id === "Backspace" || id === "keypad-delete") {
+        // Delete
+        deleteNumber();
+    }
         // Percentage
         // Fraction
         // Squared
         // Square Root
         // +/-
-        // Delete
-        case "Backspace":
-            deleteNumber();
-            break;
-        case "keypad-delete":
-            deleteNumber();
-            break;
         // Memory
-        //
-        default:
-            break;
-    }
 }
 
-// formats text to be printed to the display
-const printToDisplay = (num) => {
-    return num;
+// Clears current number entered (CE)
+const clearDisplay = () => {
+    currentNum = "0";
+    mainDisplay.innerHTML = printToDisplay(currentNum);
 }
 
 // Clears current calculation (C)
@@ -182,20 +105,26 @@ const clearCalc = () => {
     upperDisplay.innerHTML = "";
 }
 
-// Clears current number entered (CE)
-const clearDisplay = () => {
-    currentNum = "0";
-    mainDisplay.innerHTML = printToDisplay(currentNum);
+// formats text to be printed to the display
+const printToDisplay = (num) => {
+    return num;
 }
 
 // Add entered number to current number
 const addToNumber = num => {
+    // if a previous calculation has been done, clear all, to enter new number
+    if (upperDisplay.innerHTML.indexOf("=") !== -1) {
+        clearCalc();
+    }
+    // if the decimal button is pressed, check if number already contains decimal point
     if (num === ".") {
         if (currentNum.indexOf(".") === -1) {
             currentNum = `${currentNum}${num}`;
         }
+    // stops user entering leading 0's
     } else if (currentNum === "0") {
         currentNum = num;
+    // adds number entered to end of string
     } else {
         currentNum = `${currentNum}${num}`;
     }
@@ -209,39 +138,42 @@ const deleteNumber = () => {
 }
 
 const useOperator = (newOperator) => {
+    // updates display and operator after calculation 
+    const updateOperator = () => {
+        upperDisplay.innerHTML = `${printToDisplay(total.toString())} ${newOperator}`;
+        operator = newOperator;
+        clearDisplay();
+    }
+    // does calculation based on previous operator
     switch (operator) {
         case undefined:
             total = parseFloat(currentNum);
-            updateOperator(newOperator);
+            updateOperator();
             break;
         case "+":
             total += parseFloat(currentNum);
-            updateOperator(newOperator);
+            updateOperator();
             break;
         case "-":
             total -= parseFloat(currentNum);
-            updateOperator(newOperator);
+            updateOperator();
             break;
         case "x":
             total *= parseFloat(currentNum);
-            updateOperator(newOperator);
+            updateOperator();
             break;
         case "&#247":
             total /= parseFloat(currentNum);
-            updateOperator(newOperator);
+            updateOperator();
             break;
         default:
             break;
     }
 }
 
-const updateOperator = (newOperator) => {
-        upperDisplay.innerHTML = `${printToDisplay(total.toString())} ${newOperator}`;
-        operator = newOperator;
-        clearDisplay();
-}
-
+// does final calculation and displays answer
 const equals = () => {
+    // equals button only works if the operator variable conatins a value
     if (operator !== undefined) {
         upperDisplay.innerHTML = `${printToDisplay(total.toString())} ${operator} ${printToDisplay(currentNum)} =`;
         switch (operator) {
@@ -265,6 +197,6 @@ const equals = () => {
                 break;
         }
         operator = undefined;
-        currentNum = 0;
+        currentNum = total.toString();
     }
 }
