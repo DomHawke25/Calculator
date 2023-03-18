@@ -22,6 +22,10 @@ a {
     text-decoration: none;
 }
 
+button > * {
+    pointer-events: none;
+}
+
 /*========================= MAIN =========================*/
 
 /*** Wrapper that sizes the calculator according to screen size ***/
@@ -101,6 +105,10 @@ a {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(6, 1fr);
+}
+
+#keypad-delete img {
+    width: 50%;
 }
 
 .keypad-button {

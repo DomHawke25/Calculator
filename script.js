@@ -19,6 +19,7 @@ window.onkeydown = event => {
 // onClick event for buttons
 buttons.forEach(button => {
     button.onclick = event => {
+        console.log(event.target.id);
         selectFunction(event.target.id);
     }
 });
@@ -82,13 +83,26 @@ const selectFunction = id => {
     } else if (id === "Backspace" || id === "keypad-delete") {
         // Delete
         deleteNumber();
-    }
-        // Percentage
-        // Fraction
-        // Squared
+    } else if (id === "@" || id === "keypad-root") {
         // Square Root
+        specialOperator("root");
+    } else if (id === "%" || id === "keypad-%") {
+        // Percentage
+        specialOperator("percent");
+    } else if (id === "R" || id === "r" || id === "keypad-fraction") {
+        // Fraction
+        specialOperator("fraction");
+    } else if (id === "Q" || id === "q" || id === "keypad-power") {
+        // Squared
+        specialOperator("power");
+    }
         // +/-
         // Memory
+}
+
+// formats text to be printed to the display
+const printToDisplay = (num) => {
+    return num;
 }
 
 // Clears current number entered (CE)
@@ -103,11 +117,6 @@ const clearCalc = () => {
     total = 0;
     operator = undefined;
     upperDisplay.innerHTML = "";
-}
-
-// formats text to be printed to the display
-const printToDisplay = (num) => {
-    return num;
 }
 
 // Add entered number to current number
@@ -173,29 +182,54 @@ const useOperator = (newOperator) => {
 
 // does final calculation and displays answer
 const equals = () => {
-    // equals button only works if the operator variable conatins a value
+    // equals button only works if the operator variable contains an operand
     if (operator !== undefined) {
         upperDisplay.innerHTML = `${printToDisplay(total.toString())} ${operator} ${printToDisplay(currentNum)} =`;
         switch (operator) {
             case "+":
                 total += parseFloat(currentNum);
-                mainDisplay.innerHTML = `${printToDisplay(total.toString())}`;
                 break;
             case "-":
                 total -= parseFloat(currentNum);
-                mainDisplay.innerHTML = `${printToDisplay(total.toString())}`;
                 break;
             case "x":
                 total *= parseFloat(currentNum);
-                mainDisplay.innerHTML = `${printToDisplay(total.toString())}`;
                 break;
             case "&#247":
                 total /= parseFloat(currentNum);
-                mainDisplay.innerHTML = `${printToDisplay(total.toString())}`;
                 break;
             default:
                 break;
         }
+        mainDisplay.innerHTML = printToDisplay(total.toString());
+        operator = undefined;
+        currentNum = total.toString();
+    }
+}
+
+const specialOperator = (newOperator) => {
+    console.log(currentNum);
+    console.log(total);
+    if (parseFloat(currentNum) !== 0) {
+        switch (newOperator) {
+            case "root":
+                total = Math.sqrt(parseFloat(currentNum));
+                upperDisplay.innerHTML = `<sup>2</sup>&#8730<span style="text-decoration: overline;"> ${printToDisplay(currentNum)}</span> =`;
+                break;
+            case "power":
+                total = parseFloat(currentNum) * parseFloat(currentNum);
+                upperDisplay.innerHTML = `${printToDisplay(currentNum)}<sup>2</sup> =`;
+                break;
+            case "fraction":
+                total = 1 / parseFloat(currentNum);
+                upperDisplay.innerHTML = `<sup>1</sup>/<sub>${printToDisplay(currentNum)}</sub> =`;
+                break;
+            case "percent":
+                break;
+            default:
+                break;
+        }
+        mainDisplay.innerHTML = printToDisplay(total.toString());
         operator = undefined;
         currentNum = total.toString();
     }
