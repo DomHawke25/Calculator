@@ -12,14 +12,13 @@ let operator = undefined;
 
 // onKeypress event for kyeboard
 window.onkeydown = event => {
-    console.log(event.key);
     selectFunction(event.key);
 }
 
 // onClick event for buttons
 buttons.forEach(button => {
     button.onclick = event => {
-        console.log(event.target.id);
+        document.activeElement.blur(); // set focus back to <body>
         selectFunction(event.target.id);
     }
 });
@@ -88,15 +87,17 @@ const selectFunction = id => {
         specialOperator("root");
     } else if (id === "%" || id === "keypad-%") {
         // Percentage
-        specialOperator("percent");
+        percentOperator();
     } else if (id === "R" || id === "r" || id === "keypad-fraction") {
         // Fraction
         specialOperator("fraction");
     } else if (id === "Q" || id === "q" || id === "keypad-power") {
         // Squared
         specialOperator("power");
-    }
+    } else if (id === "F9" || id === "keypad-+-") {
         // +/-
+        switchNegativePositive();
+    }
         // Memory
 }
 
@@ -135,9 +136,28 @@ const addToNumber = num => {
         currentNum = num;
     // adds number entered to end of string
     } else {
-        currentNum = `${currentNum}${num}`;
+        //checks if number is no more than 16 digits
+        let tempNum = currentNum.replace(".", "");
+        if (tempNum.length < 16) {
+            currentNum = `${currentNum}${num}`;
+        }
     }
     mainDisplay.innerHTML = printToDisplay(currentNum);
+}
+
+// switches between positive and negative of numbered entered
+const switchNegativePositive = () => {
+    // checks if a calculation has been done, stops user changing value of answer
+    if (upperDisplay.innerHTML.indexOf("=") === -1) {
+        // checks if value is positive
+        if (currentNum.indexOf("-") === -1) {
+            currentNum = `-${currentNum}`;
+        // else value must be negative
+        } else {
+            currentNum = currentNum.slice(1, currentNum.length);
+        }
+        mainDisplay.innerHTML = printToDisplay(currentNum);
+    }
 }
 
 // deletes last number from string
@@ -207,9 +227,33 @@ const equals = () => {
     }
 }
 
+const percentOperator = () => {
+    // percent button only works if the operator variable contains an operand
+    if (operator !== undefined) {
+        upperDisplay.innerHTML = `${printToDisplay(total.toString())} ${operator} ${printToDisplay(currentNum)}% =`;
+        switch (operator) {
+            case "+":
+                total *= 1 + (parseFloat(currentNum) / 100);
+                break;
+            case "-":
+                total *= 1 - (parseFloat(currentNum) / 100);
+                break;
+            case "x":
+                total *= parseFloat(currentNum) / 100;
+                break;
+            case "&#247":
+                total /= parseFloat(currentNum) / 100;
+                break;
+            default:
+                break;
+        }
+        mainDisplay.innerHTML = printToDisplay(total.toString());
+        operator = undefined;
+        currentNum = total.toString();
+    }
+}
+
 const specialOperator = (newOperator) => {
-    console.log(currentNum);
-    console.log(total);
     if (parseFloat(currentNum) !== 0) {
         switch (newOperator) {
             case "root":
@@ -223,8 +267,6 @@ const specialOperator = (newOperator) => {
             case "fraction":
                 total = 1 / parseFloat(currentNum);
                 upperDisplay.innerHTML = `<sup>1</sup>/<sub>${printToDisplay(currentNum)}</sub> =`;
-                break;
-            case "percent":
                 break;
             default:
                 break;
