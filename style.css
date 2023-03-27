@@ -64,18 +64,17 @@ button > * {
 
 .display-both p {
     margin: 5px;
+    white-space: nowrap;
 }
 
 .display-upper {
     height: 33%;
     align-items: flex-end;
+    font-size: 1rem;
 }
 
 .display-main {
     height: 66%;
-}
-
-.display-main {
     font-size: 3rem;
     font-weight: 600;
 }

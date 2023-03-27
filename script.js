@@ -10,6 +10,10 @@ let currentNum = "0";
 let total = 0;
 let operator = undefined;
 
+// Initialise font size, in order to edit it in javascript
+mainDisplay.style.fontSize = "3rem";
+upperDisplay.style.fontSize = "1rem";
+
 // onKeypress event for kyeboard
 window.onkeydown = event => {
     selectFunction(event.key);
@@ -102,23 +106,8 @@ const selectFunction = id => {
 }
 
 // formats text to be printed to the display
-const formatNumber = (num) => {
-    /* Process
-    1. Split Num by Decimal Point
-    2. If whole number is greater than 16 digits, display as exponent.
-    3. Round decimal number, so number displayed is no more than 16 digits.
-    4. Add thousand's seprators.
-    */
-
-    // round last digit displayed
-    const roundLastNumber = (firstDigit, secondDigit) => {
-        if (parseFloat(secondDigit) >= 5) {
-            let newNum = parseFloat(firstDigit) + 1;
-            return newNum.toString();
-        }
-        return firstDigit;
-    }
-    
+const formatNumber = (num) => {    
+    // Split number into whole number and decimal portion
     let numArray = num.split(".");
     // test if number contains muinus sign
     let minusSign = numArray[0].indexOf("-") === -1 ? 0 : 1;
@@ -126,25 +115,7 @@ const formatNumber = (num) => {
     // If the first part of the number is larger than 16 digits then convert to an exponential
     if (numArray[0].length > 16 + minusSign) {
         return parseFloat(num).toExponential(); // returns in text format
-        /*
-        // build a 16 digit number, removes any trailing 0's
-        let numTemp = parseFloat(`${numArray[0].substring(0, 1)}.${numArray[0].substring(1, 15)}${roundLastNumber(numArray[0][15], numArray[0][16])}`);
-        // convert number to string
-        let numString = numTemp.toString();
-        // checks if number rounded to single digit, adds .0 if it did
-        if (numString.indexOf(".") === -1) {
-            numString = `${numString}.0`;
-        }
-        return `${numString}e+${numArray[0].length - 1}`;
-        */
     }
-
-    /*
-    if (numArray[0].length === 16 + minusSign && numArray[1].length > 0) {
-        numArray[0] = `${numArray[0].substring(0, 14 + minusSign)${roundLastNumber(numArray[0][15 + minusSign], numArray[1][0])}}`;
-        numArray[1] = "";
-    }
-    */
 
     // Add thousand seperators
     if (numArray[0].length > 3 + minusSign) {
@@ -160,15 +131,31 @@ const formatNumber = (num) => {
         numArray[0] = newNum;
     }
 
-    // Round to total of 16 digits
-
     return numArray.join(".");
+}
+
+// Print text to display and resize text if it overflows container
+const printToDisplay = (display, stringToPrint) => {
+    // Reset display to original font size
+    if (display.id === "display-main") {
+        mainDisplay.style.fontSize = "3rem";
+    } else if (display.id === "display-upper") {
+        upperDisplay.style.fontSize = "1rem";
+    }
+
+    // Print string to diaply
+    display.innerHTML = stringToPrint;
+
+    // Adjust font size till number fits in container
+    while (display.offsetWidth > display.parentElement.offsetWidth) {
+        display.style.fontSize = `${parseFloat(display.style.fontSize) - 0.1}rem`;
+    }
 }
 
 // Clears current number entered (CE)
 const clearDisplay = () => {
     currentNum = "0";
-    mainDisplay.innerHTML = formatNumber(currentNum);
+    printToDisplay(mainDisplay, formatNumber(currentNum));
 }
 
 // Clears current calculation (C)
@@ -201,7 +188,7 @@ const addToNumber = num => {
             currentNum = `${currentNum}${num}`;
         }
     }
-    mainDisplay.innerHTML = formatNumber(currentNum);
+    printToDisplay(mainDisplay, formatNumber(currentNum));
 }
 
 // switches between positive and negative of numbered entered
@@ -215,20 +202,20 @@ const switchNegativePositive = () => {
         } else {
             currentNum = currentNum.slice(1, currentNum.length);
         }
-        mainDisplay.innerHTML = formatNumber(currentNum);
+        printToDisplay(mainDisplay, formatNumber(currentNum));
     }
 }
 
 // deletes last number from string
 const deleteNumber = () => {
     currentNum = currentNum.length > 1 ? currentNum.slice(0, -1) : "0";
-    mainDisplay.innerHTML = formatNumber(currentNum);
+    printToDisplay(mainDisplay, formatNumber(currentNum));
 }
 
 const useOperator = (newOperator) => {
     // updates display and operator after calculation 
     const updateOperator = () => {
-        upperDisplay.innerHTML = `${formatNumber(total.toString())} ${newOperator}`;
+        printToDisplay(upperDisplay, `${formatNumber(total.toString())} ${newOperator}`);
         operator = newOperator;
         clearDisplay();
     }
@@ -263,7 +250,7 @@ const useOperator = (newOperator) => {
 const equals = () => {
     // equals button only works if the operator variable contains an operand
     if (operator !== undefined) {
-        upperDisplay.innerHTML = `${formatNumber(total.toString())} ${operator} ${formatNumber(currentNum)} =`;
+        printToDisplay(upperDisplay, `${formatNumber(total.toString())} ${operator} ${formatNumber(currentNum)} =`);
         switch (operator) {
             case "+":
                 total += parseFloat(currentNum);
@@ -280,7 +267,7 @@ const equals = () => {
             default:
                 break;
         }
-        mainDisplay.innerHTML = formatNumber(total.toString());
+        printToDisplay(mainDisplay, formatNumber(total.toString()));
         operator = undefined;
         currentNum = total.toString();
     }
@@ -289,7 +276,7 @@ const equals = () => {
 const percentOperator = () => {
     // percent button only works if the operator variable contains an operand
     if (operator !== undefined) {
-        upperDisplay.innerHTML = `${formatNumber(total.toString())} ${operator} ${formatNumber(currentNum)}% =`;
+        printToDisplay(upperDisplay, `${formatNumber(total.toString())} ${operator} ${formatNumber(currentNum)}% =`);
         switch (operator) {
             case "+":
                 total *= 1 + (parseFloat(currentNum) / 100);
@@ -306,7 +293,7 @@ const percentOperator = () => {
             default:
                 break;
         }
-        mainDisplay.innerHTML = formatNumber(total.toString());
+        printToDisplay(mainDisplay, formatNumber(total.toString()));
         operator = undefined;
         currentNum = total.toString();
     }
@@ -317,20 +304,20 @@ const specialOperator = (newOperator) => {
         switch (newOperator) {
             case "root":
                 total = Math.sqrt(parseFloat(currentNum));
-                upperDisplay.innerHTML = `<sup>2</sup>&#8730<span style="text-decoration: overline;"> ${formatNumber(currentNum)}</span> =`;
+                printToDisplay(upperDisplay, `<sup>2</sup>&#8730<span style="text-decoration: overline;"> ${formatNumber(currentNum)}</span> =`);
                 break;
             case "power":
                 total = parseFloat(currentNum) * parseFloat(currentNum);
-                upperDisplay.innerHTML = `${formatNumber(currentNum)}<sup>2</sup> =`;
+                printToDisplay(upperDisplay, `${formatNumber(currentNum)}<sup>2</sup> =`);
                 break;
             case "fraction":
                 total = 1 / parseFloat(currentNum);
-                upperDisplay.innerHTML = `<sup>1</sup>/<sub>${formatNumber(currentNum)}</sub> =`;
+                printToDisplay(upperDisplay, `<sup>1</sup>/<sub>${formatNumber(currentNum)}</sub> =`);
                 break;
             default:
                 break;
         }
-        mainDisplay.innerHTML = formatNumber(total.toString());
+        printToDisplay(mainDisplay, formatNumber(total.toString()));
         operator = undefined;
         currentNum = total.toString();
     }
