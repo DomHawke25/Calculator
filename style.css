@@ -92,6 +92,11 @@ button > * {
     background-color: inherit;
 }
 
+#memory-M-List span {
+    margin: auto 2px;
+    font-size: 10px;
+}
+
 @media screen and (min-width: 801px) {
     .memory-button:hover {
         font-weight: 600;

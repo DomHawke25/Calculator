@@ -9,6 +9,7 @@ const upperDisplay = document.getElementById("display-upper");
 let currentNum = "0";
 let total = 0;
 let operator = undefined;
+const memoryArray = [];
 
 // Initialise font size, in order to edit it in javascript
 mainDisplay.style.fontSize = "3rem";
@@ -101,6 +102,21 @@ const selectFunction = id => {
     } else if (id === "F9" || id === "keypad-+-") {
         // +/-
         switchNegativePositive();
+    } else if (id === "memory-MC") {
+        // Clear Memory
+        editMemory("MC");
+    } else if (id === "memory-MR") {
+        // Recall Memory
+        editMemory("MR");
+    } else if (id === "memory-M+") {
+        // Add current number to first stored number
+        editMemory("M+");
+    } else if (id === "memory-M-") {
+        // Subtract current number from first stored number
+        editMemory("M-");
+    } else if (id === "memory-MS") {
+        // Store current number at beginning of Array
+        editMemory("MS");
     }
         // Memory
 }
@@ -321,4 +337,58 @@ const specialOperator = (newOperator) => {
         operator = undefined;
         currentNum = total.toString();
     }
+}
+
+// Edits memory Array
+const editMemory = (button) => {
+    const enableDisableButtons = (changeStatus) => {
+        document.getElementById("memory-MC").disabled = changeStatus;
+        document.getElementById("memory-MR").disabled = changeStatus;
+        document.getElementById("memory-M-List").disabled = changeStatus;
+    }
+
+    switch (button) {
+        case "M+":
+            // Adds current number to first number in memory
+            if (memoryArray.length > 0) {
+                memoryArray[0] += parseFloat(currentNum);
+            } else {
+                memoryArray.push(0 + parseFloat(currentNum));
+                enableDisableButtons(false);
+            }
+            break;
+        case "M-":
+            // Subtracts current number from first number in memory
+            if (memoryArray.length > 0) {
+                memoryArray[0] -= parseFloat(currentNum);
+            } else {
+                memoryArray.push(0 - parseFloat(currentNum));
+                enableDisableButtons(false);
+            }
+            break;
+        case "MS":
+            // Stores current number at beginning of Array
+            memoryArray.unshift(parseFloat(currentNum));
+            enableDisableButtons(false);
+            break;
+        case "MC":
+            // Clears memory
+            memoryArray.length = 0;
+            enableDisableButtons(true);
+            break;
+        case "MR":
+            // if a previous calculation has been done, clear all, to enter new number
+            if (upperDisplay.innerHTML.indexOf("=") !== -1) {
+                clearCalc();
+            }
+            // Sets current number to first number in array
+            currentNum = memoryArray[0].toString();
+            printToDisplay(mainDisplay, formatNumber(currentNum));
+            break;
+        case "MList":
+            break;
+        default:
+            break;
+    }
+    console.log(memoryArray);
 }
