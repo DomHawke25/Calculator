@@ -6,14 +6,14 @@ viewCode.setAttribute("href", "https://github.com/domhawke25/Calculator");
 const buttons = document.querySelectorAll("button");
 const mainDisplay = document.getElementById("display-main");
 const upperDisplay = document.getElementById("display-upper");
+const overlay = document.getElementById("overlay");
+const memoryList = document.getElementById("memory-list");
+
 let currentNum = "0";
 let total = 0;
 let operator = undefined;
 const memoryArray = [];
 
-// Initialise font size, in order to edit it in javascript
-mainDisplay.style.fontSize = "3rem";
-upperDisplay.style.fontSize = "1rem";
 
 // onKeypress event for kyeboard
 window.onkeydown = event => {
@@ -27,6 +27,14 @@ buttons.forEach(button => {
         selectFunction(event.target.id);
     }
 });
+
+// close overlay when clicked
+overlay.onclick = () => {
+    document.getElementById("memory-overlay").style.display = "none";
+    for (let i = 0; i < memoryArray.length; i++) {
+        memoryList.removeChild(memoryList.firstChild);
+    }
+}
 
 // selects relevant function based on input
 const selectFunction = id => {
@@ -117,8 +125,10 @@ const selectFunction = id => {
     } else if (id === "memory-MS") {
         // Store current number at beginning of Array
         editMemory("MS");
+    } else if (id === "memory-M-List") {
+        // loads list of items in memory
+        displayMemoryList();
     }
-        // Memory
 }
 
 // formats text to be printed to the display
@@ -339,6 +349,36 @@ const specialOperator = (newOperator) => {
     }
 }
 
+// creates div element for number stored in memory
+const createMemoryElement = (num) => {
+    // create div element for memory item
+    const elementMemoryItem = document.createElement("div");
+    elementMemoryItem.classList.add("memory-item");
+    
+    // create p element and add to memory item
+    const elementNum = document.createElement("p");
+    elementNum.innerHTML = formatNumber(num.toString());
+    elementMemoryItem.appendChild(elementNum);
+    
+    // create M- button and add to memory item
+    const elementMemoryMinus = document.createElement("button");
+    elementMemoryMinus.innerHTML = "M-";
+    elementMemoryItem.appendChild(elementMemoryMinus);
+
+    // create M+ button and add to memory item
+    const elementMemoryPlus = document.createElement("button");
+    elementMemoryPlus.innerHTML = "M+";
+    elementMemoryItem.appendChild(elementMemoryPlus);
+
+    // create MC button and add to memory item
+    const elementMemoryClear = document.createElement("button");
+    elementMemoryClear.innerHTML = "MC";
+    elementMemoryItem.appendChild(elementMemoryClear);
+
+    // add memory item to list
+    memoryList.insertBefore(elementMemoryItem, memoryList.firstChild);
+}
+
 // Edits memory Array
 const editMemory = (button) => {
     const enableDisableButtons = (changeStatus) => {
@@ -385,10 +425,16 @@ const editMemory = (button) => {
             currentNum = memoryArray[0].toString();
             printToDisplay(mainDisplay, formatNumber(currentNum));
             break;
-        case "MList":
-            break;
         default:
             break;
     }
     console.log(memoryArray);
+}
+
+const displayMemoryList = () => {
+    document.getElementById("memory-overlay").style.display = "flex";
+    for (let i = memoryArray.length; i > 0; i--) {
+        createMemoryElement(memoryArray[i-1]);
+    }
+    console.log(memoryList.childElementCount);
 }

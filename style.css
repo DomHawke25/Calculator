@@ -1,4 +1,10 @@
 /*** Universal Styles ***/
+:root {
+    --mainColour: #89CFF0;
+    --secondaryColour: #9DD9F3;
+    --tertiaryColour: #B8E2F2;
+    --green: #94C58C;
+}
 
 html, * {
     font-family: Arial, Helvetica, sans-serif;
@@ -44,7 +50,7 @@ button > * {
     margin: auto;
     border: 6px solid black;
     border-radius: 20px;
-    background-color: #89CFF0;
+    background-color: var(--mainColour);
 }
 
 /*** Styles for the output display ***/
@@ -121,24 +127,108 @@ button > * {
     border-radius: 5px;
     font-weight: 600;
     font-size: 1.2rem;
-    background-color: #9DD9F3;
+    background-color: var(--secondaryColour);
 }
 
 .keypad-button:nth-child(n+9):nth-child(-n+11),
 .keypad-button:nth-child(n+13):nth-child(-n+15),
 .keypad-button:nth-child(n+17):nth-child(-n+19),
 .keypad-button:nth-child(n+21):nth-child(-n+23) {
-    background-color: #B8E2F2;
+    background-color: var(--tertiaryColour);
 }
 
 .keypad-button:nth-last-child(1) {
-    background-color: #94C58C;
+    background-color: var(--green);
 }
 
 @media screen and (min-width: 801px) {
     .keypad-button:hover {
         border: 3px solid black;
     }
+}
+
+/*** Styling of Memory List ***/
+#memory-overlay {
+    position: absolute;
+    z-index: 50;
+    width: min(calc(95% - 11px), calc((350px * 0.95) - 11px));
+    aspect-ratio: 1 / 1.875;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+#overlay {
+    width: 100%;
+    border-radius: 15px 15px 0 0;
+    flex-grow: 1;
+}
+
+#memory-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 68%;
+    border-radius: 0 0 15px 15px;
+    background-color: var(--secondaryColour);
+    overflow: auto;
+    animation: openMemory 300ms linear;
+}
+
+@keyframes openMemory {
+    0% {height: 0%}
+    100% {height: 68%}
+}
+
+/*** Styling for items in memory list ***/
+.memory-item {
+    height: 80px;
+    width: 95%;
+    margin: 15px auto 5px auto;
+    border-radius: 5px;
+} 
+
+.memory-item:hover {
+    background-color: var(--tertiaryColour);
+}
+
+.memory-item p {
+    padding: 10px 10px;
+    margin: 0;
+    text-align: right;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.memory-item button {
+    float: right;
+    width: 35px;
+    height: 25px;
+    margin: 0 8px 5px 0;
+    border-radius: 5px;
+    background-color: inherit;
+    border: none;
+}
+
+.memory-item button:hover {
+    background-color: var(--secondaryColour);
+}
+
+.clear-memory {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+#clear-memory {
+    width: 32px;
+    height: 32px;
+    margin: 5px;
+    border: none;
+    background-color: inherit;
 }
 
 /*========================= Footer =========================*/
