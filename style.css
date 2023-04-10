@@ -3,15 +3,18 @@
     --mainColour: #89CFF0;
     --secondaryColour: #9DD9F3;
     --tertiaryColour: #B8E2F2;
-    --green: #94C58C;
+    --contrastingColour: #94C58C;
 }
 
 html, * {
     font-family: Arial, Helvetica, sans-serif;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 
 html {
+    background: -webkit-gradient(linear, left top, right top, from(#ADA996), color-stop(#F2F2F2), color-stop(#DBDBDB), to(#EAEAEA));
+    background: -o-linear-gradient(left, #ADA996, #F2F2F2, #DBDBDB, #EAEAEA);
     background: linear-gradient(to right, #ADA996, #F2F2F2, #DBDBDB, #EAEAEA);
 }
 
@@ -43,7 +46,12 @@ button > * {
 
 /*** Styles for outline and layout of contents of the Calculator ***/
 .calculator {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
     width: 95%;
     height: 100%;
@@ -55,15 +63,28 @@ button > * {
 
 /*** Styles for the output display ***/
 .display {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     height: 25%;
 }
 
 .display-both {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
     justify-content: flex-end;
     width: 97%;
 }
@@ -74,8 +95,10 @@ button > * {
 }
 
 .display-upper {
-    height: 33%;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
     align-items: flex-end;
+    height: 33%;
     font-size: 1rem;
 }
 
@@ -103,6 +126,12 @@ button > * {
     font-size: 10px;
 }
 
+.memory-button:active {
+    -webkit-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+}
+
 @media screen and (min-width: 801px) {
     .memory-button:hover {
         font-weight: 600;
@@ -111,10 +140,10 @@ button > * {
 
 /*** Styles for the keypad ***/
 .keypad {
-    height: 67%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(6, 1fr);
+    height: 67%;
 }
 
 #keypad-delete img {
@@ -125,9 +154,9 @@ button > * {
     margin: 5px;
     border: 1px solid black;
     border-radius: 5px;
+    background-color: var(--secondaryColour);
     font-weight: 600;
     font-size: 1.2rem;
-    background-color: var(--secondaryColour);
 }
 
 .keypad-button:nth-child(n+9):nth-child(-n+11),
@@ -138,7 +167,13 @@ button > * {
 }
 
 .keypad-button:nth-last-child(1) {
-    background-color: var(--green);
+    background-color: var(--contrastingColour);
+}
+
+.keypad-button:active {
+    -webkit-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    transform: scale(0.9);
 }
 
 @media screen and (min-width: 801px) {
@@ -151,32 +186,49 @@ button > * {
 #memory-overlay {
     position: absolute;
     z-index: 50;
+    display: none;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
     width: min(calc(95% - 11px), calc((350px * 0.95) - 11px));
     aspect-ratio: 1 / 1.875;
-    background-color: rgba(0,0,0,0.5);
     border-radius: 10px;
-    display: none;
-    flex-direction: column;
-    justify-content: flex-end;
+    background-color: rgba(0,0,0,0.5);
 }
 
 #overlay {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
     width: 100%;
     border-radius: 15px 15px 0 0;
-    flex-grow: 1;
 }
 
 #memory-list {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
     width: 100%;
     height: 68%;
     border-radius: 0 0 15px 15px;
     background-color: var(--secondaryColour);
     overflow: auto;
+    -webkit-animation: openMemory 300ms linear;
     animation: openMemory 300ms linear;
 }
 
+@-webkit-keyframes openMemory {
+    0% {height: 0%}
+    100% {height: 68%}
+}
 @keyframes openMemory {
     0% {height: 0%}
     100% {height: 68%}
@@ -207,19 +259,36 @@ button > * {
     width: 35px;
     height: 25px;
     margin: 0 8px 5px 0;
+    border: none;
     border-radius: 5px;
     background-color: inherit;
-    border: none;
 }
 
-.memory-item button:hover {
-    background-color: var(--secondaryColour);
+.memory-item button:active {
+    -webkit-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
 }
+
+@media screen and (min-width: 801px) {
+    .memory-item button:hover {
+        font-weight: 600;
+    }
+}
+
 
 .clear-memory {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
     flex-grow: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
     justify-content: flex-end;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
     align-items: flex-end;
 }
 
@@ -229,6 +298,17 @@ button > * {
     margin: 5px;
     border: none;
     background-color: inherit;
+}
+
+#clear-memory:active {
+    -webkit-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+}
+
+.memoryIsEmpty {
+    margin: 10px 10px;
+    font-weight: 500;
 }
 
 /*========================= Footer =========================*/

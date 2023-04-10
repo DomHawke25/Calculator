@@ -8,16 +8,24 @@ const mainDisplay = document.getElementById("display-main");
 const upperDisplay = document.getElementById("display-upper");
 const overlay = document.getElementById("overlay");
 const memoryList = document.getElementById("memory-list");
+const clearMemoryButton = document.getElementById("clear-memory");
 
 let currentNum = "0";
 let total = 0;
 let operator = undefined;
 const memoryArray = [];
 
+let deleteMemoryItem, addToMemoryItem, subtractFromMemoryItem, setCurrentToMemoryItem;
+
+// set memory-overlay display property to none, in order for the property to be usuable on key event below.
+document.getElementById("memory-overlay").style.display = "none";
 
 // onKeypress event for kyeboard
 window.onkeydown = event => {
-    selectFunction(event.key);
+    // checks to make sure overlay for memory list is not active.
+    if (document.getElementById("memory-overlay").style.display === "none") {
+        selectFunction(event.key);
+    }
 }
 
 // onClick event for buttons
@@ -30,10 +38,24 @@ buttons.forEach(button => {
 
 // close overlay when clicked
 overlay.onclick = () => {
+    // Hides memory overlay
     document.getElementById("memory-overlay").style.display = "none";
-    for (let i = 0; i < memoryArray.length; i++) {
+    // Deletes all memory items from the memory overlay
+    while (memoryList.childElementCount > 1) {
         memoryList.removeChild(memoryList.firstChild);
     }
+}
+
+// clears memory when clicked
+clearMemoryButton.onclick = () => {
+    // Empties array
+    memoryArray.length = 0;
+    // Deletes all memory items from the memory overlay
+    while (memoryList.childElementCount > 1) {
+        memoryList.removeChild(memoryList.firstChild);
+    }
+    // Displays 'There's nothing saved in your memory.' and disables memory buttons
+    doIfMemoryListIsEmpty();
 }
 
 // selects relevant function based on input
@@ -349,36 +371,6 @@ const specialOperator = (newOperator) => {
     }
 }
 
-// creates div element for number stored in memory
-const createMemoryElement = (num) => {
-    // create div element for memory item
-    const elementMemoryItem = document.createElement("div");
-    elementMemoryItem.classList.add("memory-item");
-    
-    // create p element and add to memory item
-    const elementNum = document.createElement("p");
-    elementNum.innerHTML = formatNumber(num.toString());
-    elementMemoryItem.appendChild(elementNum);
-    
-    // create M- button and add to memory item
-    const elementMemoryMinus = document.createElement("button");
-    elementMemoryMinus.innerHTML = "M-";
-    elementMemoryItem.appendChild(elementMemoryMinus);
-
-    // create M+ button and add to memory item
-    const elementMemoryPlus = document.createElement("button");
-    elementMemoryPlus.innerHTML = "M+";
-    elementMemoryItem.appendChild(elementMemoryPlus);
-
-    // create MC button and add to memory item
-    const elementMemoryClear = document.createElement("button");
-    elementMemoryClear.innerHTML = "MC";
-    elementMemoryItem.appendChild(elementMemoryClear);
-
-    // add memory item to list
-    memoryList.insertBefore(elementMemoryItem, memoryList.firstChild);
-}
-
 // Edits memory Array
 const editMemory = (button) => {
     const enableDisableButtons = (changeStatus) => {
@@ -428,13 +420,162 @@ const editMemory = (button) => {
         default:
             break;
     }
-    console.log(memoryArray);
 }
 
+// creates div element for number stored in memory
+const createMemoryElement = (num) => {
+    // create div element for memory item
+    const elementMemoryItem = document.createElement("div");
+    elementMemoryItem.classList.add("memory-item");
+    
+    // create p element and add to memory item
+    const elementNum = document.createElement("p");
+    elementNum.innerHTML = formatNumber(num.toString());
+    elementNum.classList.add("setCurrentToMemoryItem");
+    elementMemoryItem.appendChild(elementNum);
+    
+    // create M- button and add to memory item
+    const elementMemoryMinus = document.createElement("button");
+    elementMemoryMinus.innerHTML = "M-";
+    elementMemoryMinus.classList.add("subtractFromMemoryItem");
+    elementMemoryItem.appendChild(elementMemoryMinus);
+
+    // create M+ button and add to memory item
+    const elementMemoryPlus = document.createElement("button");
+    elementMemoryPlus.innerHTML = "M+";
+    elementMemoryPlus.classList.add("addToMemoryItem");
+    elementMemoryItem.appendChild(elementMemoryPlus);
+
+    // create MC button and add to memory item
+    const elementMemoryClear = document.createElement("button");
+    elementMemoryClear.innerHTML = "MC";
+    elementMemoryClear.classList.add("deleteMemoryItem");
+    elementMemoryItem.appendChild(elementMemoryClear);
+
+    // add memory item to list
+    memoryList.insertBefore(elementMemoryItem, memoryList.firstChild);
+}
+
+// assigns reference number to each memory item to align with its position in the memory array
+const setReference = () => {
+    let temp;
+
+    // Set refrence for each memory item in memory list
+    temp = document.querySelectorAll(".memory-item");
+    for (let i = 0; i < temp.length; i++)  {
+        temp[i].id = `Z${i}`;
+    }
+
+    // Set reference for each <p> tag in memory list
+    temp = document.querySelectorAll(".setCurrentToMemoryItem");
+    for (let i = 0; i < temp.length; i++) {
+        temp[i].id = `A${i}`;
+    }
+
+    // Set reference for each M- button in memory list
+    temp = document.querySelectorAll(".subtractFromMemoryItem");
+    for (let i = 0; i < temp.length; i++) {
+        temp[i].id = `B${i}`;
+    }
+
+    // Set reference for each M+ button in memory list
+    temp = document.querySelectorAll(".addToMemoryItem");
+    for (let i = 0; i < temp.length; i++) {
+        temp[i].id = `C${i}`;
+    }
+
+    // Set referecne for each MC button in memory list
+    temp = document.querySelectorAll(".deleteMemoryItem");
+    for (let i = 0; i < temp.length; i++) {
+        temp[i].id = `D${i}`;
+    }
+}
+
+// Displays 'There's nothing saved in your memory.' and disables memory buttons
+const doIfMemoryListIsEmpty = () => {
+    // create <p> element and insert before bin icon
+    const temp = document.createElement("p");
+    temp.innerHTML = "There's nothing saved in your memory.";
+    temp.classList.add("memoryIsEmpty");
+    memoryList.insertBefore(temp, memoryList.firstChild);
+    // disbale memory buttons
+    document.getElementById("memory-MC").disabled = true;
+    document.getElementById("memory-MR").disabled = true;
+    document.getElementById("memory-M-List").disabled = true;
+}
+
+// Display list of memory items when screen is opened
 const displayMemoryList = () => {
+    // Set the display of the memory list overylay to flex
     document.getElementById("memory-overlay").style.display = "flex";
+    // for each item in the memory array, create the div element to be used in the memory list on screen
     for (let i = memoryArray.length; i > 0; i--) {
         createMemoryElement(memoryArray[i-1]);
     }
-    console.log(memoryList.childElementCount);
+    // give all div elements the reference they need that aligns with its placing in the memory array
+    setReference();
+
+    // Add onClick event to memory item
+    setCurrentToMemoryItem = document.querySelectorAll(".setCurrentToMemoryItem");
+    setCurrentToMemoryItem.forEach(num => {
+        // onClick event
+        num.addEventListener("click", event => {
+            // Removes the A from the id of the number in memory leaving number its array reference
+            let ref = event.target.id.slice(1, event.target.id.length);
+            // clears display if a calculations has previousley been completed
+            if (upperDisplay.innerHTML.indexOf("=") !== -1) {
+                clearCalc();
+            }
+            //sets current number to the number stored in array, prints to display
+            currentNum = memoryArray[ref].toString();
+            printToDisplay(mainDisplay, formatNumber(currentNum));
+        });
+    });
+
+    // Add onClick event to MC buttons on memory item
+    deleteMemoryItem = document.querySelectorAll(".deleteMemoryItem");
+    deleteMemoryItem.forEach(num => {
+        // onClick event
+        num.addEventListener("click", event => {
+            // Removes the D from the id of the number in memory leaving number its array reference
+            let ref = event.target.id.slice(1, event.target.id.length);
+            // removes number from memory array
+            memoryArray.splice(ref, 1);
+            // Removes <div> memory item from memory list and reset references
+            let temp = document.getElementById(`Z${ref}`);
+            temp.remove();
+            // if memory list still contains numbers then reset references, if not show that memory list is empty
+            if (memoryList.childElementCount > 1) {
+                setReference();
+            } else {
+                doIfMemoryListIsEmpty();
+            }
+        });
+    });
+
+    // Add onClick event to M+ buttons on memory item
+    addToMemoryItem = document.querySelectorAll(".addToMemoryItem");
+    addToMemoryItem.forEach(num => {
+        // onClick event
+        num.addEventListener("click", event => {
+            // Removes the C from the id of the number in memory leaving number its array reference
+            let ref = event.target.id.slice(1, event.target.id.length);
+            // Adds current number to number in memory selected.
+            memoryArray[ref] += parseFloat(currentNum);
+            document.getElementById(`A${ref}`).innerHTML = formatNumber(memoryArray[ref].toString());
+        });
+    });
+
+    // Add onClick event to M- buttons on memory item
+    subtractFromMemoryItem = document.querySelectorAll(".subtractFromMemoryItem");
+    subtractFromMemoryItem.forEach(num => {
+        // onClick event
+        num.addEventListener("click", event => {
+            // Removes the B from the id of the number in memory leaving number its array reference
+            let ref = event.target.id.slice(1, event.target.id.length);
+            // Adds current number to number in memory selected.
+            memoryArray[ref] -= parseFloat(currentNum);
+            document.getElementById(`A${ref}`).innerHTML = formatNumber(memoryArray[ref].toString());
+        });
+    });
 }
